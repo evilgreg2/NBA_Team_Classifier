@@ -1,6 +1,8 @@
 import os
 import pandas as pd
 import json
+from anyascii import anyascii
+
 
 
 input_directory = "Unsorted_Data/NBA Players"
@@ -14,6 +16,7 @@ def get_all_team_names():
 def get_players_for_team(team):
     team_players = players_csv.loc [players_csv['Tm'] == team]
     team_player_names = list(sorted(set(team_players['Player'])))
+    team_player_names = list(map(anyascii, team_player_names))
     return team_player_names
 
 def get_all_team_rosters():
