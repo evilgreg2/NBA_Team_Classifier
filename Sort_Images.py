@@ -37,6 +37,22 @@ def create_team_folders(output_directory):
         team_folders[team] = team_folder
     return team_folders
 
+def sort_player_images(input_directory, team_folders, roster):
+    folder_name = os.path.split(input_directory)[1]
+    names = folder_name.split(", ")
+    player_name = names[1] + " " + names[0]
+    print(player_name)
+
+
+def sort_all_player_images(input_directory = "Unsorted_Data/NBA Players"):
+    team_folders = create_team_folders("NBA_Teams")
+    rosters = get_all_team_rosters()
+    player_directory_names = os.listdir(input_directory)
+    for player_directory in player_directory_names:
+        player_directory = os.path.join(input_directory, player_directory)
+        if os.path.isdir(player_directory):
+            sort_player_images(player_directory, team_folders, rosters)
+
 if __name__ == "__main__":
     save_roster_to_file()
-    create_team_folders("NBA_Teams")
+    sort_all_player_images()
