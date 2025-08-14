@@ -17,7 +17,10 @@ def get_players_for_team(team):
     team_players = players_csv.loc [players_csv['Tm'] == team]
     team_player_names = list(sorted(set(team_players['Player'])))
     team_player_names = list(map(anyascii, team_player_names))
-    return team_player_names
+    player_names_lowercase = []
+    for name in team_player_names:
+        player_names_lowercase.append(name.lower())
+    return player_names_lowercase
 
 def get_all_team_rosters():
     roster = {}
@@ -41,7 +44,12 @@ def sort_player_images(input_directory, team_folders, roster):
     folder_name = os.path.split(input_directory)[1]
     names = folder_name.split(", ")
     player_name = names[1] + " " + names[0]
-    print(player_name)
+    player_name = player_name.lower()
+    teams = []
+    for team_name, team_players in roster.items():
+        if player_name in team_players:
+            teams.append(team_name)
+    print(player_name, teams)
 
 
 def sort_all_player_images(input_directory = "Unsorted_Data/NBA Players"):
