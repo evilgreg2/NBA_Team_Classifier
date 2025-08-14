@@ -28,6 +28,15 @@ def save_roster_to_file(file_name = "roster.json"):
     roster = get_all_team_rosters()
     with open(file_name, 'w') as outfile:
         json.dump(roster, outfile, indent=4)
+
+def create_team_folders(output_directory):
+    team_folders = {}
+    for team in get_all_team_names():
+        team_folder = os.path.join(output_directory, team)
+        os.makedirs(team_folder, exist_ok=True)
+        team_folders[team] = team_folder
+    return team_folders
+
 if __name__ == "__main__":
     save_roster_to_file()
-
+    create_team_folders("NBA_Teams")
