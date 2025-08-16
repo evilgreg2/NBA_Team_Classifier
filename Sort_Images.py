@@ -2,6 +2,8 @@ import os
 import pandas as pd
 import json
 from anyascii import anyascii
+import shutil
+from tqdm import tqdm
 
 
 
@@ -54,6 +56,8 @@ def create_team_folders(output_directory):
         team_folders[team] = team_folder
     return team_folders
 
+image_extensions = [".jpg", ".png", ".jpeg"]
+
 def sort_player_images(input_directory, team_folders, roster):
     folder_name = os.path.split(input_directory)[1]
     names = folder_name.split(", ")
@@ -65,13 +69,27 @@ def sort_player_images(input_directory, team_folders, roster):
             teams.append(team_name)
     if len(teams) == 0:
         print(f"No teams found:'{player_name}'")
+        return
+
+    images = []
+    for file_name in os.listdir(input_directory):
+        if not os.path.isfile(os.path.join(input_directory, file_name)):
+            continue
+        for image_extension in image_extensions:
+            if file_name.lower().endswith(image_extension):
+                images.append(file_name)
+                break
+    for team in teams:
+        team_folder = team_folders[team]
+        for image in images:
+            shutil.copyfile(os.path.join(input_directory, image), os.path.join(team_folder,image))
 
 
 def sort_all_player_images(input_directory = "Unsorted_Data/NBA Players"):
     team_folders = create_team_folders("NBA_Teams")
     rosters = get_all_team_rosters()
     player_directory_names = os.listdir(input_directory)
-    for player_directory in player_directory_names:
+    for player_directory in tqdm(player_directory_names, desc="Sorting Player Images"):
         player_directory = os.path.join(input_directory, player_directory)
         if os.path.isdir(player_directory):
             sort_player_images(player_directory, team_folders, rosters)
