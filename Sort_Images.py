@@ -13,14 +13,28 @@ def get_all_team_names():
     teams = list(sorted(set(players_csv['Tm'])))
     return teams
 
+remove_text = [
+    ".",
+    " iii",
+    " jr",
+    " ii",
+    " sr",
+    " iv",
+    "'"
+]
+def standardize_player_name(name):
+    name = anyascii(name)
+    name = name.lower()
+    for remove in remove_text:
+        name = name.replace(remove, '')
+        name = name.strip()
+    return name
+
 def get_players_for_team(team):
     team_players = players_csv.loc [players_csv['Tm'] == team]
     team_player_names = list(sorted(set(team_players['Player'])))
-    team_player_names = list(map(anyascii, team_player_names))
-    player_names_lowercase = []
-    for name in team_player_names:
-        player_names_lowercase.append(name.lower())
-    return player_names_lowercase
+    team_player_names = list(map(standardize_player_name, team_player_names))
+    return team_player_names
 
 def get_all_team_rosters():
     roster = {}
@@ -44,12 +58,13 @@ def sort_player_images(input_directory, team_folders, roster):
     folder_name = os.path.split(input_directory)[1]
     names = folder_name.split(", ")
     player_name = names[1] + " " + names[0]
-    player_name = player_name.lower()
+    player_name = standardize_player_name(player_name)
     teams = []
     for team_name, team_players in roster.items():
         if player_name in team_players:
             teams.append(team_name)
-    print(player_name, teams)
+    if len(teams) == 0:
+        print(f"No teams found:'{player_name}'")
 
 
 def sort_all_player_images(input_directory = "Unsorted_Data/NBA Players"):
