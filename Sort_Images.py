@@ -1,3 +1,4 @@
+import hashlib
 import os
 import pandas as pd
 import json
@@ -79,10 +80,13 @@ def sort_player_images(input_directory, team_folders, roster):
             if file_name.lower().endswith(image_extension):
                 images.append(file_name)
                 break
-    for team in teams:
-        team_folder = team_folders[team]
-        for image in images:
-            shutil.copyfile(os.path.join(input_directory, image), os.path.join(team_folder,image))
+    for image in images:
+        #Hash the file contents to create a unique file name
+        with open(os.path.join(input_directory, image), 'rb') as image_file:
+            file_hash_name = hashlib.sha1(image_file.read()).hexdigest() + os.path.splitext(image)[1].lower()
+        for team in teams:
+            team_folder = team_folders[team]
+            shutil.copyfile(os.path.join(input_directory, image), os.path.join(team_folder,file_hash_name))
 
 
 def sort_all_player_images(input_directory = "Unsorted_Data/NBA Players"):
