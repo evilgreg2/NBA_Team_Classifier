@@ -50,7 +50,10 @@ net = imageNet(model="resnet18.onnx", labels="NBA_Teams/labels.txt",
 input = videoSource(args.input, argv=sys.argv)
 output = videoOutput(args.output, argv=sys.argv)
 font = cudaFont()
-
+full_team_names = {
+    "BOS": "Boston Celtics",
+    "CHI": "Chicago Bulls"
+}
 # process frames until EOS or the user exits
 while True:
     # capture the next image
@@ -67,11 +70,12 @@ while True:
     # draw predicted class labels
     for n, (classID, confidence) in enumerate(predictions):
         classLabel = net.GetClassLabel(classID)
+        team_name = full_team_names[classLabel]
         confidence *= 100.0
 
-        print(f"imagenet:  {confidence:05.2f}% class #{classID} ({classLabel})")
+        print(f"imagenet:  {confidence:05.2f}% class #{classID} ({team_name})")
 
-        font.OverlayText(img, text=f"{confidence:05.2f}% {classLabel}",
+        font.OverlayText(img, text=f"{confidence:05.2f}% {team_name}",
                          x=5, y=5 + n * (font.GetSize() + 5),
                          color=font.White, background=font.Gray40)
 
