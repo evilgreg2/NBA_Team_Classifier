@@ -30,12 +30,10 @@ from jetson_utils import videoSource, videoOutput, cudaFont, Log
 # parse the command line
 parser = argparse.ArgumentParser(description="Classify a live camera stream using an image recognition DNN.",
                                  formatter_class=argparse.RawTextHelpFormatter,
-                                 epilog=imageNet.Usage() + videoSource.Usage() + videoOutput.Usage() + Log.Usage())
+                                 epilog=videoSource.Usage() + videoOutput.Usage() + Log.Usage())
 
 parser.add_argument("input", type=str, default="", nargs='?', help="URI of the input stream")
 parser.add_argument("output", type=str, default="", nargs='?', help="URI of the output stream")
-parser.add_argument("--network", type=str, default="googlenet",
-                    help="pre-trained model to load (see below for options)")
 parser.add_argument("--topK", type=int, default=1, help="show the topK number of class predictions (default: 1)")
 
 try:
@@ -44,14 +42,9 @@ except:
     print("")
     parser.print_help()
     sys.exit(0)
-NBA_args = ["--model = resnet18.onnx" , "--input_blob = input_0" , "--output_blob = output_0" , "--labels = NBA_Teams/labels.txt"]
-# load the recognition network
-net = imageNet(args.network, sys.argv)
 
-# note: to hard-code the paths to load a model, the following API can be used:
-#
-# net = imageNet(model="model/resnet18.onnx", labels="model/labels.txt",
-#                 input_blob="input_0", output_blob="output_0")
+net = imageNet(model="resnet18.onnx", labels="NBA_Teams/labels.txt",
+                 input_blob="input_0", output_blob="output_0")
 
 # create video sources & outputs
 input = videoSource(args.input, argv=sys.argv)
