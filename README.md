@@ -20,7 +20,7 @@ After running this script it should load up the retrained imagenet and process t
 classify as either Chicago Bulls or Boston Celtics.
 
 
-[View a video demonstration here](./DemoOutput.mp4)
+[View a video demonstration here](https://www.youtube.com/watch?v=eOQji10Isis)
 
 
 
