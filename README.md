@@ -1,7 +1,7 @@
 # NBA Teams Classifier
 
 Given an image of  a player or basketball jersey, this model will attempt to classify the team.
-The project currently correctly classifies images as either Chicago Bulls or Boston Celtics
+The project currently correctly classifies images as either Chicago Bulls or Boston Celtics.
 I plan to add more teams in the future.
 
 
